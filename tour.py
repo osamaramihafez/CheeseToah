@@ -57,6 +57,6 @@ if __name__ == '__main__':
 
     tour_of_four_stools(four_stools,
                         animate=console_animate,
-                        delay_btw_moves=delay_between_moves)
+                        delay_btw_moves=delay_between_moves)#Idk why delay and animate are switched
 
     print(four_stools.number_of_moves())

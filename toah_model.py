@@ -53,20 +53,73 @@ class TOAHModel:
         5
         """
         # you must have _move_seq as well as any other attributes you choose
-        #self._number_of_cheeses == ???????
-        self._number_of_moves == 0
-        self._number_of_stools == number_of_stools
+        self._number_of_cheeses = 0
+        self._number_of_moves = 0
+        self._number_of_stools = number_of_stools
         self._move_seq = MoveSequence([])
     
-    def number_of_moves():
+    def fill_first_stool(self, num_cheeses):
+        """Found in tour.py and __init__ method
+        
+        """
+        self._number_of_cheeses = num_cheeses
+        
+    def number_of_moves(self):
+        """Found in docstring for __init__ and gui_controller
+        
+        """
         pass
         
-    def get_number_of_cheeses():
+    def get_number_of_cheeses(self):
+        """Found in docstring for __init__
+        
+        """        
         pass
     
-    def get_number_of_stools():
-        return self._number_of_stools
+    def get_number_of_stools(self):
+        """Return the number of stools for the toah problem 
         
+        """        
+        return self._number_of_stools
+    
+    def add(self):
+        """Found inside gui_controller
+        
+        >>> TOAHModel.add(cheese, 0)
+        ???
+        """
+        pass
+    
+    def move(self, from_stool, stool_index):
+        """Found inside gui_controller
+        
+        >>>
+        
+        """
+        pass
+    def get_cheese_location(self, cheese):
+        """Found inside gui_controller
+        
+        >>> TOAHModel.get_cheese_location(cheese)
+        ???
+        """
+        pass
+    
+    def get_cheese_location(self, cheese_to_move):#<---- Need to change paramaters
+        """Found inside gui_controller
+        
+        >>> TOAHModel.get_cheese_location(cheese_to_move <--- change this)
+        ???
+        """
+        pass
+    
+    def get_top_cheese(self, stool_index):
+        """Found inside gui_controller
+        
+        >>> get_top_cheese(stool_index)
+        ???
+        """
+    
     def get_move_seq(self):
         """ Return the move sequence
 
