@@ -138,7 +138,7 @@ class TOAHModel:
             self._stools[from_stool].pop() #Must ensure that the stool being taken from is not empty.
             self._move_seq.add_move(from_stool, stool_index)
         else:
-            raise InvalidMoveError("Invalid Move")
+            raise IllegalMoveError("Invalid Move")
     
     def get_cheese_location(self, cheese):
         """Found inside gui_controller
