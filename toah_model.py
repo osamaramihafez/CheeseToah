@@ -29,11 +29,6 @@ algorithm.
 # along with this file.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-class Stack():
-    pass
-
-
-
 class TOAHModel:
     """ Model a game of Tour Of Anne Hoy.
 
@@ -122,25 +117,6 @@ class TOAHModel:
         ???
         """
         return cheese.current_stool()
-        #moves = self._move_seq
-        #moves_from_start = {}
-        #moves_to_start = {}
-        # #Note that the size of the cheese correlates to the position on the first stool
-        # #Note that following the cheese block may need to be recursive?
-        #for i in range(moves.length()):
-            #if moves[i][0] == 1: #Trying to get the first move away from the first stool for each cheese
-                #if moves[i] not in moves_from_start:
-                    #moves_from_start[moves[i]] = [i] #note that I need to subtract all of the moves to the start position.
-                #else:
-                    #moves_from_start[moves[i]].append(i)
-            #elif moves[i][1] == 1:
-                #if moves[i] not in moves_from_start:
-                    #moves_to_start[moves[i]] = [i] #note that I need to subtract all of the moves to the start position.
-                #else:
-                    #moves_to_start[moves[i]].append(i)
-        #for move in moves_from_start.keys():
-            #possible_first_move = moves_from_start[move]
-        #return 1
                 
     
     def get_top_cheese(self, stool_index):
