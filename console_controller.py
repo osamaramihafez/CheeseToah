@@ -83,5 +83,3 @@ if __name__ == '__main__':
     # TODO:
     # You should initiate game play here. Your game should be playable by
     # running this file.
-    pass
-    
