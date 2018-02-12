@@ -29,6 +29,10 @@ algorithm.
 # along with this file.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+class Stack():
+    pass
+
+
 
 class TOAHModel:
     """ Model a game of Tour Of Anne Hoy.
@@ -53,28 +57,34 @@ class TOAHModel:
         5
         """
         # you must have _move_seq as well as any other attributes you choose
-        self._number_of_cheeses = 0
-        self._number_of_moves = 0
+        # note that we actually need the cheeses to be generated
+        self._stools = {} #Each stool contains cheeses
+        self._cheese_list = []
         self._number_of_stools = number_of_stools
         self._move_seq = MoveSequence([])
+        #self._total_moves = 0
+        for i in range(number_of_stools):
+            self._stools[i] = []
     
     def fill_first_stool(self, num_cheeses):
         """Found in tour.py and __init__ method
         
         """
-        self._number_of_cheeses = num_cheeses
+        for i in range(1, num_cheeses, -1):
+            self._cheese_list.append(Cheese(i))
+            self._stools[0] = self._cheese_list
         
     def number_of_moves(self):
         """Found in docstring for __init__ and gui_controller
         
         """
-        pass
+        return self._move_seq.length()
         
     def get_number_of_cheeses(self):
         """Found in docstring for __init__
         
         """        
-        pass
+        return len(self._cheese_list)
     
     def get_number_of_stools(self):
         """Return the number of stools for the toah problem 
@@ -82,13 +92,14 @@ class TOAHModel:
         """        
         return self._number_of_stools
     
-    def add(self):
+    def add(self, cheese, num):
         """Found inside gui_controller
         
         >>> TOAHModel.add(cheese, 0)
         ???
         """
-        pass
+        self._cheese_list.append(cheese)
+        self._stools[num].append(cheese)
     
     def move(self, from_stool, stool_index):
         """Found inside gui_controller
@@ -96,22 +107,41 @@ class TOAHModel:
         >>>
         
         """
-        pass
+        self._move_seq.add_move(from_stool, stool_index)
+        cheese_being_moved = self._cheese_list.index(self._stools[from_stool][-1]) #finding the cheese that is going to be moved.
+        self._cheese_list[cheese_being_moved].move_to(stool_index) #Changed Cheese stool location
+        self._stools[stool_index].append(self._stools[from_stool][-1])
+        self._stools[from_stool].pop() #Must ensure that the stool being taken from is not empty.
+        #self._total_moves += 1
+        
+    
     def get_cheese_location(self, cheese):
         """Found inside gui_controller
         
         >>> TOAHModel.get_cheese_location(cheese)
         ???
         """
-        pass
-    
-    def get_cheese_location(self, cheese_to_move):#<---- Need to change paramaters
-        """Found inside gui_controller
-        
-        >>> TOAHModel.get_cheese_location(cheese_to_move <--- change this)
-        ???
-        """
-        pass
+        return cheese.current_stool()
+        #moves = self._move_seq
+        #moves_from_start = {}
+        #moves_to_start = {}
+        # #Note that the size of the cheese correlates to the position on the first stool
+        # #Note that following the cheese block may need to be recursive?
+        #for i in range(moves.length()):
+            #if moves[i][0] == 1: #Trying to get the first move away from the first stool for each cheese
+                #if moves[i] not in moves_from_start:
+                    #moves_from_start[moves[i]] = [i] #note that I need to subtract all of the moves to the start position.
+                #else:
+                    #moves_from_start[moves[i]].append(i)
+            #elif moves[i][1] == 1:
+                #if moves[i] not in moves_from_start:
+                    #moves_to_start[moves[i]] = [i] #note that I need to subtract all of the moves to the start position.
+                #else:
+                    #moves_to_start[moves[i]].append(i)
+        #for move in moves_from_start.keys():
+            #possible_first_move = moves_from_start[move]
+        #return 1
+                
     
     def get_top_cheese(self, stool_index):
         """Found inside gui_controller
@@ -119,6 +149,11 @@ class TOAHModel:
         >>> get_top_cheese(stool_index)
         ???
         """
+        try:
+            top_cheese = self._stools[stool_index][-1]
+            return top_cheese
+        except IndexError:
+            return None
     
     def get_move_seq(self):
         """ Return the move sequence
@@ -158,7 +193,7 @@ class TOAHModel:
         >>> m1 == m2
         True
         """
-        pass
+        return self._stools == other._stools
 
     def _cheese_at(self, stool_index, stool_height):
         """ Return (stool_height)th from stool_index stool, if possible.
@@ -242,7 +277,8 @@ class Cheese:
         >>> c.size
         3
         """
-        self.size == size
+        self.size = size
+        self._stool = 0
 
     def __eq__(self, other):
         """ Is self equivalent to other?
@@ -251,11 +287,32 @@ class Cheese:
         size.
 
         @param Cheese self:
-        @param Cheese|Any other:
+        @param Cheese|Any other: <----- note that this param can be any type
         @rtype: bool
         """
-        return self.size == other.size
-
+        if isinstance(other, Cheese):
+            return self.size == other.size
+        else:
+            raise TypeError("Cannot compare Cheese to {0}.".format(type(other)))
+    
+    def current_stool(self):
+        """Return the stool on which the Cheese is placed upon. 
+        
+        """
+        
+        return self._stool
+    
+    def move_to(self, current_stool):
+        """Return the stool on which the Cheese is placed upon in tm.
+        
+        Purpose is so that each cheese block has it's own sort of address
+        so that it is easy to follow.
+        
+        @param current_stool: int
+        @rtype: int
+        """
+        self._stool = current_stool
+        
 
 class IllegalMoveError(Exception):
     """ Exception indicating move that violates TOAHModel
@@ -308,6 +365,8 @@ class MoveSequence:
         @param int dest_stool:
         @rtype: None
         """
+        if src_stool == dest_stool:
+            raise IllegalMoveError
         self._moves.append((src_stool, dest_stool))
 
     def length(self):
