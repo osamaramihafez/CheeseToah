@@ -57,6 +57,9 @@ class ConsoleController:
         """
         pass
 
+    class InvalidInputError(ValueError):
+        pass 
+
     def play_loop(self):
         """ Play Console-based game.
 
@@ -76,8 +79,41 @@ class ConsoleController:
         -After each valid move, use the method TOAHModel.__str__ that we've
         provided to print a representation of the current state of the game.
         """
-        pass
-
+        
+        print('~ Console-Based Version ~')
+        print('Use the following commands to manually control the puzzle:')
+        print('To move a block of cheese from one peg to another:')
+        print('    /"from (stool number) to (second stool number/"')
+        print('To exit the game:')
+        print('    /"exit/"')
+        
+        raw_command = ''
+        refined_command = []
+        exit_requested = False
+        
+        # While the user hasn't chosen to 
+        while exit_requested == false:
+            raw_command = input()
+            # Tries to firstly refine input for further use.
+            if raw_command != 'exit':
+                try:
+                    raw_command = command.split('/"')
+                except InvalidInputError:
+                    print('[ERROR: Invalid Input]')
+                else:
+                    # Else, checks further whether the refined input itself is useable.
+                    if ((raw_command[0] + raw_command[2]).isdigit()) or \
+                       (not (raw_command[1] + raw_command[3]).isdigit()):
+                        raise InvalidInputError('[ERROR: Invalid Input]')
+                    # Calls imported move() function to execute move according to given command.
+                    move(num(raw_command[0]) - 1, num(raw_command[2]) - 1)
+                
+                # Outputs string representation of puzzle after move is executed
+                print('Current Arrangement:\n')
+                print(TOAHModel.__str__(self))
+                
+            elif raw_command == 'exit':
+                exit_requested = True 
 
 if __name__ == '__main__':
     # TODO:
