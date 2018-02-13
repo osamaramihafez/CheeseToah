@@ -29,32 +29,32 @@ algorithm.
 # along with this file.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-class Stack:
+#class Stack:
 
-    '''A last-in, first-out (LIFO) stack of items'''
+    #'''A last-in, first-out (LIFO) stack of items'''
 
-    def __init__(self):
-        self._data = []
+    #def __init__(self):
+        #self._data = []
         
-    def pop(self):
-        if not self.is_empty():
-            return self._data.pop()
-        return None
+    #def pop(self):
+        #if not self.is_empty():
+            #return self._data.pop()
+        #return None
     
-    def item_location(self, item):
-        return self._data.index(item)
+    #def item_location(self, item):
+        #return self._data.index(item)
         
-    def is_empty(self):
-        return self._data == []
+    #def is_empty(self):
+        #return self._data == []
     
-    def push(self, item):
-        self._data.append(item)
+    #def push(self, item):
+        #self._data.append(item)
 
-    def height(self):
-        return len(self._data)
+    #def height(self):
+        #return len(self._data)
 
-    def peek(self):
-        return self._data[-1]
+    #def peek(self):
+        #return self._data[-1]
 
 class TOAHModel:
     """ Model a game of Tour Of Anne Hoy.
@@ -129,9 +129,12 @@ class TOAHModel:
         >>>
         
         """
+        #try:
         cheese_location = self._cheese_list.index(self._stools[from_stool][-1]) #finding the cheese that is going to be moved.
         cheese_being_moved = self.get_top_cheese(from_stool)
         top_of_other_stool = self.get_top_cheese(stool_index)
+        #except IndexError:
+            #raise IllegalMoveError("There is no cheese block on stool {}".format(from_stool))
         if cheese_being_moved < top_of_other_stool:
             cheese_being_moved.move_to(stool_index) #Changed Cheese stool location
             self._stools[stool_index].append(cheese_being_moved)
