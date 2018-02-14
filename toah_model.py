@@ -92,9 +92,10 @@ class TOAHModel:
         """Found in tour.py and __init__ method
         
         """
-        for i in range(1, num_cheeses, -1):
-            self._cheese_list.append(Cheese(i))
-            self._stools[0] = self._cheese_list
+        for i in range(1, num_cheeses + 1):
+            cheese = Cheese(num_cheeses - i)
+            self._cheese_list.append(cheese)
+        self._stools[0] = self._cheese_list
         
     def number_of_moves(self):
         """Found in docstring for __init__ and gui_controller
@@ -129,12 +130,12 @@ class TOAHModel:
         >>>
         
         """
-        #try:
-        cheese_location = self._cheese_list.index(self._stools[from_stool][-1]) #finding the cheese that is going to be moved.
-        cheese_being_moved = self.get_top_cheese(from_stool)
-        top_of_other_stool = self.get_top_cheese(stool_index)
-        #except IndexError:
-            #raise IllegalMoveError("There is no cheese block on stool {}".format(from_stool))
+        try:
+            cheese_location = self._cheese_list.index(self._stools[from_stool][-1]) #finding the cheese that is going to be moved.
+            cheese_being_moved = self.get_top_cheese(from_stool)
+            top_of_other_stool = self.get_top_cheese(stool_index)
+        except IndexError:
+            raise IllegalMoveError("There is no cheese block on stool {}".format(from_stool))
         if cheese_being_moved < top_of_other_stool:
             cheese_being_moved.move_to(stool_index) #Changed Cheese stool location
             self._stools[stool_index].append(cheese_being_moved)
@@ -242,7 +243,7 @@ class TOAHModel:
         stool_spacing = "  "
         stools_str = (stool_str + stool_spacing) * self.get_number_of_stools()
 
-        def _cheese_str(size):
+        def _cheese_str(size): #Why is this defined inside the string function and not outside?
             # helper for string representation of cheese
             if size == 0:
                 return " " * len(stool_str)

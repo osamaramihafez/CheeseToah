@@ -136,6 +136,7 @@ class ConsoleController_Osama:
         self._game_over = False
         
     def game_over(self):
+        self._game_over = True
         print("Thanks for Playing :)")
     
     def play_loop(self):
@@ -157,8 +158,6 @@ class ConsoleController_Osama:
         -After each valid move, use the method TOAHModel.__str__ that we've
         provided to print a representation of the current state of the game.
         """
-        
-        print('~ Console-Based Version ~')
         print("Good Luck!", ":)")
         
         # While the user hasn't chosen to 
@@ -168,7 +167,7 @@ class ConsoleController_Osama:
             print(self._tm)
             exit = input("To keep playing, press enter. Otherwise, type \'exit\' then hit enter. ")
             if exit == "exit":
-                return self.game_over()            
+                return self.game_over()           
             prev_stool = input("which stool would you like to move a cheese block from? ")
             new_stool = input("Where would you like to move it? ")
             try:
