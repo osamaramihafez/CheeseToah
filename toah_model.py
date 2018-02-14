@@ -92,10 +92,10 @@ class TOAHModel:
         """Found in tour.py and __init__ method
         
         """
-        for i in range(1, num_cheeses + 1):
+        for i in range(0, num_cheeses):
             cheese = Cheese(num_cheeses - i)
             self._cheese_list.append(cheese)
-        self._stools[0] = self._cheese_list
+        self._stools[0] = self._cheese_list[:]
         
     def number_of_moves(self):
         """Found in docstring for __init__ and gui_controller
