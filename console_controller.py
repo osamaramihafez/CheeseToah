@@ -133,7 +133,7 @@ def run():
     num_stools = input("How many stools would you like to play with?  ")
     cheese_blocks = input("How many cheese blocks (must have less than {0} blocks)?  ".format("unknown"))
     #note that there should be a limit to the number of cheese_blocks compared to the number of cheese blocks    
-    x, y = cheese_blocks, num_stools
+    x, y = num_stools, cheese_blocks
     a, b = value_check(x, y)
     game = ConsoleController_Osama(a, b)
     #Too much inside if name main.
