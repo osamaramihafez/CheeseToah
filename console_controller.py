@@ -26,7 +26,6 @@ Anne Hoy's problems from the console.
 
 from toah_model import TOAHModel, IllegalMoveError
 
-
 def move(model, origin, dest):
     """ Apply move from origin to destination in model.
 
@@ -100,16 +99,48 @@ class ConsoleController_Osama:
             except IllegalMoveError:
                 print("***\nYou can't do that...\n***")
 
+def value_check(num_stools, cheese_blocks):
+    pf = "Pass"
+    try:
+        x = int(cheese_blocks)
+        y = int(num_stools)
+    except ValueError:
+        pf = "Fail"
+    else:
+        if x<0 or y<0:
+            pf = "Fail"
+        else:
+            pf = "Pass"
+    
+    while pf == "Fail":
+        print("\nPlease enter a positive integer for stools and cheese blocks\n")
+        num_stools = input("How many stools would you like to play with?  ")
+        cheese_blocks = input("How many cheese blocks (must have less than {0} blocks)?  ".format("unknown"))
+        try:
+            x = int(cheese_blocks)
+            y = int(num_stools)
+        except ValueError:
+            pf = "Fail"
+        else:
+            if x<0 or y<0:
+                pf = "Fail"
+            else:
+                pf = "Pass"            
+    return x, y
 
+def run():
+    print("~Console-Based Version~")
+    num_stools = input("How many stools would you like to play with?  ")
+    cheese_blocks = input("How many cheese blocks (must have less than {0} blocks)?  ".format("unknown"))
+    #note that there should be a limit to the number of cheese_blocks compared to the number of cheese blocks    
+    x, y = cheese_blocks, num_stools
+    a, b = value_check(x, y)
+    game = ConsoleController_Osama(a, b)
+    #Too much inside if name main.
+    game.play_loop()    
 
 if __name__ == '__main__':
     # TODO:
     # You should initiate game play here. Your game should be playable by
     # running this file.
-    print("~Console-Based Version~")
-    num_stools = input("How many stools would you like to play with?  ")
-    cheese_blocks = input("How many cheese blocks (must have less than {0} blocks)?  ".format("unknown"))
-    #note that there should be a limit to the number of cheese_blocks compared to the number of cheese blocks
-    game = ConsoleController_Osama(int(cheese_blocks), int(num_stools))
-    game.play_loop()
-    
+    run()

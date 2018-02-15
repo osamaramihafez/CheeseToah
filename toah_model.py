@@ -85,8 +85,11 @@ class TOAHModel:
         self._number_of_stools = number_of_stools
         self._move_seq = MoveSequence([])
         #self._total_moves = 0
-        for i in range(number_of_stools):
-            self._stools[i] = []
+        try:
+            for i in range(number_of_stools):
+                self._stools[i] = []
+        except ValueError:
+            raise IllegalMoveError
     
     def fill_first_stool(self, num_cheeses):
         """Found in tour.py and __init__ method
@@ -135,7 +138,11 @@ class TOAHModel:
             cheese_being_moved = self.get_top_cheese(from_stool)
             top_of_other_stool = self.get_top_cheese(stool_index)
         except IndexError:
-            raise IllegalMoveError("There is no cheese block on stool {}".format(from_stool))
+            raise IllegalMoveError #There is no cheese block on "from_stool"
+        except KeyError:
+            raise IllegalMoveError #Stool does not exist.
+        except ValueError:
+            raise IllegalMoveError #from_stool or stool_index is not an integer
         if cheese_being_moved < top_of_other_stool:
             cheese_being_moved.move_to(stool_index) #Changed Cheese stool location
             self._stools[stool_index].append(cheese_being_moved)
