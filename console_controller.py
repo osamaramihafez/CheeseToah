@@ -96,8 +96,20 @@ class ConsoleController_Osama:
             new_stool = input("Where would you like to move it? ")
             try:
                 move(self._tm, int(prev_stool) - 1, int(new_stool) - 1)
+            except ValueError:
+                string = "\nPlease input a positive integer"
+                stars = "*"*len(string)
+                print(stars, string)
+                print(stars)
             except IllegalMoveError:
-                print("***\nYou can't do that...\n***")
+                string = "\nYou can't do that...\n"
+                stars = "*"*len(string)
+                print(stars, string)
+                print(stars)
+            if self._tm.mission_accomplished():
+                print(self._tm)
+                print("Well Done!")
+                return
 
 def value_check(num_stools, cheese_blocks):
     pf = "Pass"

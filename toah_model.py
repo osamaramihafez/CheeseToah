@@ -90,6 +90,13 @@ class TOAHModel:
                 self._stools[i] = []
         except ValueError:
             raise IllegalMoveError
+        
+    def mission_accomplished(self):
+        """Return True if user has completed puzzle.
+        
+        """
+        stool_number = self._number_of_stools - 1
+        return len(self._stools[stool_number]) == self.get_number_of_cheeses()
     
     def fill_first_stool(self, num_cheeses):
         """Found in tour.py and __init__ method
