@@ -29,33 +29,6 @@ algorithm.
 # along with this file.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-#class Stack:
-
-    #'''A last-in, first-out (LIFO) stack of items'''
-
-    #def __init__(self):
-        #self._data = []
-        
-    #def pop(self):
-        #if not self.is_empty():
-            #return self._data.pop()
-        #return None
-    
-    #def item_location(self, item):
-        #return self._data.index(item)
-        
-    #def is_empty(self):
-        #return self._data == []
-    
-    #def push(self, item):
-        #self._data.append(item)
-
-    #def height(self):
-        #return len(self._data)
-
-    #def peek(self):
-        #return self._data[-1]
-
 class TOAHModel:
     """ Model a game of Tour Of Anne Hoy.
 
@@ -94,13 +67,31 @@ class TOAHModel:
     def mission_accomplished(self):
         """Return True if user has completed puzzle.
         
+        @type self: TOAHModel
+        @rtype: bool
+        
+        >>> tm = TOAHModel(4)
+        >>> tm.fill_first_stool(1)
+        >>> tm.move(0,2)
+        >>> tm.mission_accomplished()
+        False
+        >>> tm.move(2,3)
+        >>> tm.mission_accomplished()
+        True
         """
         stool_number = self._number_of_stools - 1
         return len(self._stools[stool_number]) == self.get_number_of_cheeses()
     
     def fill_first_stool(self, num_cheeses):
-        """Found in tour.py and __init__ method
+        """Update TOAHModel so that the first stool is filled with num_cheeses.
         
+        @type self: TOAHModel
+        @type num_cheeses: int
+        
+        >>> tm = TOAHModel(4)
+        >>> tm.fill_first_stool(4)
+        >>> tm.get_number_of_cheeses()
+        4
         """
         for i in range(0, num_cheeses):
             cheese = Cheese(num_cheeses - i)
@@ -108,37 +99,89 @@ class TOAHModel:
         self._stools[0] = self._cheese_list[:]
         
     def number_of_moves(self):
-        """Found in docstring for __init__ and gui_controller
+        """Return the number of moves that have been committed inside of
+        TOAHModel
         
+        @type self: TOAHModel
+        @rtype: int
+        
+        >>> tm = TOAHModel(3)
+        >>> tm.fill_first_stool(1)
+        >>> tm.number_of_moves()
+        0
+        >>> tm.move(0, 1)
+        >>> tm.number_of_moves()
+        1
         """
         return self._move_seq.length()
         
     def get_number_of_cheeses(self):
-        """Found in docstring for __init__
+        """Return the total number of Cheese blocks inside of TOAHModel.
         
+        @type self: TOAHModel
+        @rtype: int
+        
+        >>> tm = TOAHModel(4)
+        >>> tm.fill_first_stool(3)
+        >>> tm.get_number_of_cheeses()
+        3
         """        
         return len(self._cheese_list)
     
     def get_number_of_stools(self):
         """Return the number of stools for the toah problem 
         
+        @type self: TOAHModel
+        @rtype: int
+        
+        >>> tm = TOAHModel(3)
+        >>> tm.get_number_of_stools()
+        3
         """        
         return self._number_of_stools
     
-    def add(self, cheese, num):
-        """Found inside gui_controller
+    def add(self, cheese, stool):
+        """Update TOAHModel such that the chosen stool has cheese added to it.
         
-        >>> TOAHModel.add(cheese, 0)
-        ???
+        @type self: TOAHModel
+        @type cheese: Cheese
+        @type stool: int
+        
+        >>> tm = TOAHModel(3)
+        >>> cheese = Cheese(3)
+        >>> tm.add(cheese, 0)
+        >>> tm.get_top_cheese(0) == cheese
+        True
         """
-        self._cheese_list.append(cheese)
-        self._stools[num].append(cheese)
-    
+        #NOTE THAT I HAVE NOT TAKEN CARE OF SIZING ISSUES.
+        try:
+            if cheese < self._stools[stool][-1]:
+                self._cheese_list.append(cheese)
+                self._stools[stool].append(cheese)
+            else:
+                raise IllegalMoveError
+        except IndexError:
+            self._cheese_list.append(cheese)
+            self._stools[stool].append(cheese)
+            
     def move(self, from_stool, stool_index):
-        """Found inside gui_controller
+        """Update the TOAHModel such that the top cheese on from_stool is moved
+        to stool_index.
         
-        >>>
+        Note: Not all changes can be represented in the docstring efficiently.
         
+        @type self: TOAHModel
+        @type from_stool: int
+        @type stool_index: int
+        
+        >>> tm = TOAHModel(4)
+        >>> tm.fill_first_stool(5)
+        >>> tm.move(0, 3)
+        >>> tm.number_of_moves()
+        1
+        >>> x = tm.get_top_cheese(3)
+        >>> x.get_size() == 1
+        True
         """
         try:
             cheese_location = self._cheese_list.index(self._stools[from_stool][-1]) #finding the cheese that is going to be moved.
@@ -159,19 +202,37 @@ class TOAHModel:
             raise IllegalMoveError("Invalid Move")
     
     def get_cheese_location(self, cheese):
-        """Found inside gui_controller
+        """Find the location of the given cheese.
+        Docstring example cannot be given as output depends on input.
         
-        >>> TOAHModel.get_cheese_location(cheese)
-        ???
+        @type self: TOAHModel
+        @type cheese: Cheese
+        @rtype: int
+        
+        >>> tm = TOAHModel(4)
+        >>> tm.fill_first_stool(3)
+        >>> cheese = tm.get_top_cheese(0)
+        >>> tm.get_cheese_location(cheese)
+        0
+        
         """
         return cheese.current_stool()
                 
     
     def get_top_cheese(self, stool_index):
-        """Found inside gui_controller
+        """Return the cheese that is at the top of the given stool.
         
-        >>> get_top_cheese(stool_index)
-        ???
+        @type self: TOAHModel
+        @type stool_index: int
+        @rtype: Cheese (or None)
+        
+        >>> tm = TOAHModel(4)
+        >>> print(tm.get_top_cheese(0))
+        None
+        >>> tm.fill_first_stool(1)
+        >>> tc = tm.get_top_cheese(0)
+        >>> tc.get_size() == 1
+        True
         """
         try:
             top_cheese = self._stools[stool_index][-1]
@@ -313,6 +374,11 @@ class Cheese:
         @param Cheese self:
         @param Cheese|Any other: <----- note that this param can be any type
         @rtype: bool
+        
+        >>> c = Cheese(4)
+        >>> g = Cheese(4)
+        >>> c == g
+        True
         """
         if isinstance(other, Cheese):
             return self.size == other.size
@@ -320,9 +386,17 @@ class Cheese:
             raise TypeError("Cannot compare Cheese to {0}.".format(type(other)))
         
     def __lt__(self, other):
-        """
+        """Return True iff self is smaller in size than other. If other is None
+        then return True. If other is not a Cheese, raise a TypeError.
         
+        @type self: Cheese
+        @type other: Cheese
+        @rtype: bool
         
+        >>> g = Cheese(5)
+        >>> l = Cheese(4)
+        >>> l < g
+        True
         """
         if isinstance(other, Cheese):
             return self.size < other.size
@@ -333,22 +407,42 @@ class Cheese:
     
     
     def current_stool(self):
-        """Return the stool on which the Cheese is placed upon. 
+        """Return the stool on which the Cheese is placed upon.
         
+        Note: the returned value is the position of the stool
+        and not the stool itself. 
+        
+        @type self: Cheese
+        @rtype: int
+        >>> c = Cheese(3)
+        >>> c.current_stool()
+        0
         """
         
         return self._stool
     
     def move_to(self, current_stool):
-        """Return the stool on which the Cheese is placed upon in tm.
-        
-        Purpose is so that each cheese block has it's own sort of address
-        so that it is easy to follow.
+        """Update the position of the Cheese.
         
         @param current_stool: int
         @rtype: int
+        >>> c = Cheese(4)
+        >>> c.current_stool()
+        0
         """
         self._stool = current_stool
+        
+    def get_size(self):
+        """Return the size of the Cheese.
+        
+        @type self: Cheese
+        @rtype: int
+
+        >>> c = Cheese(4)
+        >>> c.get_size()
+        4
+        """
+        return self.size
         
 
 class IllegalMoveError(Exception):
@@ -401,6 +495,8 @@ class MoveSequence:
         @param int src_stool:
         @param int dest_stool:
         @rtype: None
+        >>> ms = MoveSequence([])
+        >>> ms.add_move(0,1)
         """
         if src_stool == dest_stool:
             raise IllegalMoveError

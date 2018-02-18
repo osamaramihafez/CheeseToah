@@ -31,6 +31,11 @@ import time
 from toah_model import TOAHModel
 
 
+def tour_helper(num_cheese, original, second, third, final):
+    if n > 0:
+        tour_helper(num_cheese - 1, original, third, final, second)
+        
+
 def tour_of_four_stools(model, delay_btw_moves=0.5, animate=False):
     """Move a tower of cheeses from the first stool in model to the fourth.
 
@@ -43,8 +48,12 @@ def tour_of_four_stools(model, delay_btw_moves=0.5, animate=False):
         animate the tour or not
     @rtype: None
     """
-    pass
-
+    n = model.get_top_cheese()
+    stools = 4
+    
+    
+    
+    #Grab the second smallest block exposed to sunlight and then move it so that it is on top of the thrid smallest block. If this block does not exist, then move the smallest onto a different spot.
 
 if __name__ == '__main__':
     num_cheeses = 5
@@ -57,6 +66,6 @@ if __name__ == '__main__':
 
     tour_of_four_stools(four_stools,
                         animate=console_animate,
-                        delay_btw_moves=delay_between_moves)#Idk why delay and animate are switched
+                        delay_btw_moves=delay_between_moves)
 
     print(four_stools.number_of_moves())

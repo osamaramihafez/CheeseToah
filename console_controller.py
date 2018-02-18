@@ -44,7 +44,7 @@ def move(model, origin, dest):
 class InvalidInputError(ValueError):
     pass
 
-class ConsoleController_Osama:
+class ConsoleController:
     """ Controller for text console.
     """
 
@@ -61,8 +61,14 @@ class ConsoleController_Osama:
         self._game_over = False
         
     def game_over(self):
+        """Update _game_over to True. Print Game Over statement.
+        
+        >>> cc = ConsoleController(4,5)
+        >>> cc.game_over()
+        'Thanks for Playing :)'
+        """
         self._game_over = True
-        print("Thanks for Playing :)")
+        print("Thanks for playing :)")
     
     def play_loop(self):
         """ Play Console-based game.
@@ -127,7 +133,7 @@ def value_check(num_stools, cheese_blocks):
     while pf == "Fail":
         print("\nPlease enter a positive integer for stools and cheese blocks\n")
         num_stools = input("How many stools would you like to play with?  ")
-        cheese_blocks = input("How many cheese blocks (must have less than {0} blocks)?  ".format("unknown"))
+        cheese_blocks = input("How many cheese blocks?  ")
         try:
             x = int(cheese_blocks)
             y = int(num_stools)
@@ -143,11 +149,11 @@ def value_check(num_stools, cheese_blocks):
 def run():
     print("~Console-Based Version~")
     num_stools = input("How many stools would you like to play with?  ")
-    cheese_blocks = input("How many cheese blocks (must have less than {0} blocks)?  ".format("unknown"))
+    cheese_blocks = input("How many cheese blocks?  ")
     #note that there should be a limit to the number of cheese_blocks compared to the number of cheese blocks    
     x, y = num_stools, cheese_blocks
     a, b = value_check(x, y)
-    game = ConsoleController_Osama(a, b)
+    game = ConsoleController(a, b)
     #Too much inside if name main.
     game.play_loop()    
 
