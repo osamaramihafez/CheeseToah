@@ -27,7 +27,7 @@ functions to run TOAH tours.
 # you may want to use time.sleep(delay_between_moves) in your
 # solution for 'if __name__ == "__main__":'
 
-import time
+import time, math
 from toah_model import TOAHModel
 
 
@@ -43,9 +43,75 @@ def tour_of_four_stools(model, delay_btw_moves=0.5, animate=False):
         animate the tour or not
     @rtype: None
     """
-    pass
+    
+    num_of_cheeses = model.get_number_of_cheeses()
+
+    if animate:
+        print(model)
+        time.sleep(delay_btw_moves)
+        # animate_solve_four_stool function will go here
+    else:
+        solve_four_stool_model(model, num_of_cheeses, 0, 1, 2, 3)
 
 
+def solve_three_stool_model(model, num_of_cheese_stacks, from_stool,
+                            temp_stool, to_stool):
+
+    if num_of_cheese_stacks == 1:
+        model.move(from_stool, to_stool)
+    else:
+        solve_three_stool_model(model, num_of_cheese_stacks - 1, from_stool, to_stool, temp_stool)
+        model.move(from_stool, to_stool)
+        solve_three_stool_model(model, num_of_cheese_stacks - 1, temp_stool, from_stool, to_stool)
+    
+def evaluate_min_moves(num_of_cheeses, current_i_value):
+    return (2 * (evaluate_min_moves(num_of_cheeses - current_i_value))) + 2 ** current_i_value - 1
+
+def evaluate_new_min_moves(num_of_cheeses, current_i_value):
+    return (2 * (evaluate_min_moves(num_of_cheeses - current_i_value - 1, current_i_value - 1))) + 2 ** current_i_value - 1
+
+def i_value(num_of_cheeses, current_i_value):
+    
+    if num_of_cheeses == 1:
+        return 0
+    
+    min_moves = 2 ** current_i_value - 1
+    new_min_moves = 2 ** (current_i_value - 1) - 1
+    
+    if new_min_moves < min_moves:
+        new
+        return current_i_value
+    
+    return i_value(num_of_cheeses, current_i_value - 1)
+'''    
+def i_value(num_of_cheeses, num_of_moves):
+    
+    if num_of_cheeses == 1:
+        return 0
+    if evaluate_min_moves <= num_of_moves:
+         
+'''
+def solve_four_stool_model(model, num_of_cheeses, from_stool,
+                           first_temp, second_temp, to_stool):
+    
+    # Following line found sub_puzzle_num (i-value) using illegal formula:
+    # sub_puzzle_num = num_of_cheeses - math.ceil(math.sqrt((num_of_cheeses * 2) + 0.25) - 0.5)
+    
+    # Index by which to split the model is found with helper function
+    sub_puzzle_num = i_value(num_of_cheeses, num_of_cheeses - 1)
+    new_cheeses_num = num_of_cheeses - sub_puzzle_num
+    
+    if num_of_cheeses == 1 or num_of_cheeses == 2: 
+        # First case in which there are 1 or 2 cheeses, directly call the previous funtion
+        solve_three_stool_model(model, num_of_cheeses, from_stool, first_temp, to_stool)
+    else:
+        # Combines recursion with directly calling previous function to solve four stool model
+        solve_four_stool_model(model, sub_puzzle_num, from_stool, to_stool, second_temp,
+                               first_temp)
+        solve_three_stool_model(model, new_cheeses_num, from_stool, second_temp, to_stool)
+        solve_four_stool_model(model, sub_puzzle_num, first_temp, from_stool, second_temp,
+                               to_stool)
+        
 if __name__ == '__main__':
     num_cheeses = 5
     delay_between_moves = 0.5
@@ -53,10 +119,8 @@ if __name__ == '__main__':
 
     # DO NOT MODIFY THE CODE BELOW.
     four_stools = TOAHModel(4)
-    four_stools.fill_first_stool(number_of_cheeses=num_cheeses)
+    four_stools.fill_first_stool(num_cheeses)
 
-    tour_of_four_stools(four_stools,
-                        animate=console_animate,
-                        delay_btw_moves=delay_between_moves)#Idk why delay and animate are switched
+    tour_of_four_stools(four_stools,delay_between_moves,console_animate)#Idk why delay and animate are switched
 
     print(four_stools.number_of_moves())
