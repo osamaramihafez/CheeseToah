@@ -63,43 +63,44 @@ def solve_three_stool_model(model, num_of_cheese_stacks, from_stool,
         solve_three_stool_model(model, num_of_cheese_stacks - 1, from_stool, to_stool, temp_stool)
         model.move(from_stool, to_stool)
         solve_three_stool_model(model, num_of_cheese_stacks - 1, temp_stool, from_stool, to_stool)
-    
-def evaluate_min_moves(num_of_cheeses, current_i_value):
-    return (2 * (evaluate_min_moves(num_of_cheeses - current_i_value))) + 2 ** current_i_value - 1
 
-def evaluate_new_min_moves(num_of_cheeses, current_i_value):
-    return (2 * (evaluate_min_moves(num_of_cheeses - current_i_value - 1, current_i_value - 1))) + 2 ** current_i_value - 1
+def evaluate_min_moves(num_of_cheeses, current_i_value):
+    if current_i_value == 0 or num_of_cheeses < 0:
+        return 10000000
+    if num_of_cheeses == 0:
+        return 0
+    if num_of_cheeses == 1:
+        return 1
+    elif num_of_cheeses > 1:
+        return (2 * (evaluate_min_moves(num_of_cheeses - current_i_value, current_i_value))) + 2 ** current_i_value - 1
 
 def i_value(num_of_cheeses, current_i_value):
     
     if num_of_cheeses == 1:
         return 0
     
-    min_moves = 2 ** current_i_value - 1
-    new_min_moves = 2 ** (current_i_value - 1) - 1
+    if current_i_value > 0:
+        prev_min_moves = evaluate_min_moves(num_of_cheeses, current_i_value - 1)
+        new_min_moves = evaluate_min_moves(num_of_cheeses, current_i_value)
+    else:
+        return 10000000
     
-    if new_min_moves < min_moves:
-        new
+    print(prev_min_moves, new_min_moves)
+    if new_min_moves < prev_min_moves:
         return current_i_value
     
-    return i_value(num_of_cheeses, current_i_value - 1)
-'''    
-def i_value(num_of_cheeses, num_of_moves):
-    
-    if num_of_cheeses == 1:
-        return 0
-    if evaluate_min_moves <= num_of_moves:
-         
-'''
+    return i_value(num_of_cheeses, current_i_value + 1)
+
 def solve_four_stool_model(model, num_of_cheeses, from_stool,
                            first_temp, second_temp, to_stool):
     
     # Following line found sub_puzzle_num (i-value) using illegal formula:
     # sub_puzzle_num = num_of_cheeses - math.ceil(math.sqrt((num_of_cheeses * 2) + 0.25) - 0.5)
-    
+
     # Index by which to split the model is found with helper function
-    sub_puzzle_num = i_value(num_of_cheeses, num_of_cheeses - 1)
-    new_cheeses_num = num_of_cheeses - sub_puzzle_num
+    sub_puzzle_num = i_value(num_of_cheeses, 1)
+    print(sub_puzzle_num)
+    new_cheeses_num = num_of_cheeses - sub_puzzle_num 
     
     if num_of_cheeses == 1 or num_of_cheeses == 2: 
         # First case in which there are 1 or 2 cheeses, directly call the previous funtion
@@ -113,7 +114,7 @@ def solve_four_stool_model(model, num_of_cheeses, from_stool,
                                to_stool)
         
 if __name__ == '__main__':
-    num_cheeses = 5
+    num_cheeses = 9
     delay_between_moves = 0.5
     console_animate = False
 
@@ -124,3 +125,4 @@ if __name__ == '__main__':
     tour_of_four_stools(four_stools,delay_between_moves,console_animate)#Idk why delay and animate are switched
 
     print(four_stools.number_of_moves())
+    print(four_stools)
