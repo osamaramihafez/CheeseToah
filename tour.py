@@ -74,22 +74,23 @@ def evaluate_min_moves(num_of_cheeses, current_i_value):
     elif num_of_cheeses > 1:
         return (2 * (evaluate_min_moves(num_of_cheeses - current_i_value, current_i_value))) + 2 ** current_i_value - 1
 
-def i_value(num_of_cheeses, current_i_value):
+def i_value(num_of_cheeses, current_i_value, minimum_moves, best_value):
     
     if num_of_cheeses == 1:
         return 0
     
     if current_i_value > 0:
-        prev_min_moves = evaluate_min_moves(num_of_cheeses, current_i_value - 1)
         new_min_moves = evaluate_min_moves(num_of_cheeses, current_i_value)
-    else:
-        return 10000000
     
-    print(prev_min_moves, new_min_moves)
-    if new_min_moves < prev_min_moves:
-        return current_i_value
-    
-    return i_value(num_of_cheeses, current_i_value + 1)
+    print(minimum_moves, new_min_moves)
+    print('i-value: ', current_i_value)
+    if new_min_moves < minimum_moves:
+        minimum_moves = new_min_moves
+        best_value = current_i_value
+    if current_i_value == num_of_cheeses - 1:
+        return best_value
+
+    return i_value(num_of_cheeses, current_i_value + 1, minimum_moves, best_value)
 
 def solve_four_stool_model(model, num_of_cheeses, from_stool,
                            first_temp, second_temp, to_stool):
@@ -98,7 +99,7 @@ def solve_four_stool_model(model, num_of_cheeses, from_stool,
     # sub_puzzle_num = num_of_cheeses - math.ceil(math.sqrt((num_of_cheeses * 2) + 0.25) - 0.5)
 
     # Index by which to split the model is found with helper function
-    sub_puzzle_num = i_value(num_of_cheeses, 1)
+    sub_puzzle_num = i_value(num_of_cheeses, 1, 1000000, 0)
     print(sub_puzzle_num)
     new_cheeses_num = num_of_cheeses - sub_puzzle_num 
     
@@ -114,7 +115,7 @@ def solve_four_stool_model(model, num_of_cheeses, from_stool,
                                to_stool)
         
 if __name__ == '__main__':
-    num_cheeses = 9
+    num_cheeses = 11
     delay_between_moves = 0.5
     console_animate = False
 
