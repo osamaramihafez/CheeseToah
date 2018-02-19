@@ -46,6 +46,9 @@ def tour_of_four_stools(model, delay_btw_moves=0.5, animate=False):
     
     num_of_cheeses = model.get_number_of_cheeses()
 
+    if num_of_cheeses == 0:
+        print('You cannot solve a puzzle with zero cheeses.')
+        return None
     if animate:
         print(model)
         time.sleep(delay_btw_moves)
@@ -115,7 +118,7 @@ def solve_four_stool_model(model, num_of_cheeses, from_stool,
                                to_stool)
         
 if __name__ == '__main__':
-    num_cheeses = 11
+    num_cheeses = 5
     delay_between_moves = 0.5
     console_animate = False
 
